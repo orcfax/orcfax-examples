@@ -1,0 +1,21 @@
+name = "orcfax/mock"
+version = "0.0.0"
+compiler = "v1.0.29-alpha"
+plutus = "v2"
+license = "Apache-2.0"
+description = "Aiken contracts for project 'orcfax/mock'"
+
+[repository]
+user = "orcfax"
+project = "mock"
+platform = "github"
+
+[[dependencies]]
+name = "aiken-lang/stdlib"
+version = "1.9.0"
+source = "github"
+
+[[dependencies]]
+name = "orcfax/orcfax-aiken"
+version = "main"
+source = "github"

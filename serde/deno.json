@@ -1,0 +1,15 @@
+{
+  "tasks": {
+    "serde" : "deno run -A src/main.ts",
+  },
+  "lint": {
+    "rules": {
+      "tags": [
+        "recommended"
+      ],
+      "exclude": [
+        "import-map-remap"
+      ]
+    }
+  }
+}
