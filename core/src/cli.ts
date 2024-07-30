@@ -1,6 +1,6 @@
 import { lucid } from "../deps.ts";
 import { Command, Option } from "npm:commander";
-import { env } from "./env.ts";
+import { blockfrostkey, env } from "./env.ts";
 import {
   BlockfrostConfig,
   blockfrostDefaultUrl,
@@ -103,7 +103,7 @@ function parseBlockfrostOpts(
     return {
       type: "BlockfrostConfig",
       url: blockfrostDefaultUrl(network),
-      key: env.ORCFAX_EXAMPLES_BLOCKFROST_KEY,
+      key: env[blockfrostkey(network)],
     };
   } else {
     throw new Error("blockfrost provider options not yet supported");

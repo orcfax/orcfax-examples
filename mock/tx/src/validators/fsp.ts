@@ -61,6 +61,14 @@ export function valiAsset(validatorHash: string): lucid.Assets {
   return Object.fromEntries([[valiUnit(validatorHash), 1n]]);
 }
 
+// ADDRESS
+
+export function address(l: lucid.Lucid, validatorHash: string): string {
+  return l.utils.credentialToAddress(
+    l.utils.scriptHashToCredential(validatorHash),
+  );
+}
+
 // CHAIN QUERIES
 
 export async function getState(
