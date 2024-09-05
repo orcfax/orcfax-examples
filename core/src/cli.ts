@@ -8,7 +8,7 @@ import {
   KupmiosConfig,
 } from "./provider.ts";
 import { parse } from "jsr:@std/dotenv@^0.225.0/parse";
-import { privateKeys } from "./wallets.ts";
+import { privateKeys, wallets } from "./wallets.ts";
 
 export function defaultProgam() {
   const program = new Command();
@@ -19,13 +19,13 @@ export function defaultProgam() {
   return program;
 }
 
-const providerOptsHelp = `
+const providerHelp = `
 Provider options are a bit involved. 
 The valid syntax depends on the provider.
 Sane defaults are provided. 
 `;
 
-export function addNetworkOpts(program: Command) {
+export function addNetwork(program: Command) {
   program
     .addOption(
       new Option("--network <network>", "Cardano network").choices([
@@ -38,7 +38,7 @@ export function addNetworkOpts(program: Command) {
   return program;
 }
 
-export function addProviderOpts(program: Command) {
+export function addProvider(program: Command) {
   program
     .addOption(
       new Option("--provider <provider>", "Provider of network services")
@@ -51,19 +51,19 @@ export function addProviderOpts(program: Command) {
     .addOption(
       new Option(
         "--provider-opts <opts>",
-        providerOptsHelp,
+        providerHelp,
       ),
     );
   return program;
 }
 
-export function addLucidOpts(program: Command) {
-  addNetworkOpts(program);
-  addProviderOpts(program);
+export function addLucid(program: Command) {
+  addNetwork(program);
+  addProvider(program);
   return program;
 }
 
-export function addWalletOpts(program: Command) {
+export function addWallet(program: Command) {
   program
     .addOption(
       new Option(
@@ -74,10 +74,10 @@ export function addWalletOpts(program: Command) {
   return program;
 }
 
-export function addLucidWithWalletOpts(program: Command) {
-  addNetworkOpts(program);
-  addProviderOpts(program);
-  addWalletOpts(program);
+export function addLucidWithWallet(program: Command) {
+  addNetwork(program);
+  addProvider(program);
+  addWallet(program);
   return program;
 }
 
@@ -189,4 +189,9 @@ export function parseLucidWithWallet(
     res.selectWalletFromPrivateKey(sk);
     return res;
   });
+}
+
+export function resolveAddress(network : lucid.Network, woa : string) : string {
+  const ws = wallets(network);
+  return ws[woa] ? ws[woa].address : woa;
 }

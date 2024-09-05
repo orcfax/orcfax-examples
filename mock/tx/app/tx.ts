@@ -1,6 +1,6 @@
 #!/usr/bin/env -S deno run -A
 
-import { Command, } from "npm:commander";
+import { Command } from "npm:commander";
 import { core } from "../deps.ts";
 import * as mod from "../mod.ts";
 
@@ -12,7 +12,7 @@ function cli() {
       "do a tx",
     )
     .version("0.0.1");
-  core.cli.addLucidWithWalletOpts(program);
+  core.cli.addLucidWithWallet(program);
   core.txs.distribute.cli(program);
   core.txs.clear.cli(program);
   mod.txs.uploadFs.cli(program);

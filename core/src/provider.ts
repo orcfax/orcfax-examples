@@ -28,6 +28,7 @@ export type ProviderConfig = BlockfrostConfig | KupmiosConfig | EmulatorConfig;
 
 export function mkProvider(config: ProviderConfig) {
   if (config.type === "BlockfrostConfig") {
+    console.log("hello", config.key);
     return new lucid.Blockfrost(config.url, config.key || "defaultKey");
   } else if (config.type === "KupmiosConfig") {
     return new lucid.Kupmios(config.kupoUrl, config.ogmiosUrl);

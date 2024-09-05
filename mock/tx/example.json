@@ -1,18 +1,18 @@
 [
   {
-    "feedId" : "CER/ADA-USD/v0",
-    "createdAt" : "2024-07-29 00:00:00",
-    "body" : {
-      "num" : 123,
-      "denom" : 456
+    "feedId": "CER/ADA-USD/v0",
+    "createdAt": "2024-07-29 00:00:00",
+    "body": {
+      "num": 123,
+      "denom": 456
     }
   },
   {
-    "feedId" : "CER/FEED-ADA/v0",
-    "createdAt" : "2024-07-29 01:00:00",
-    "body" : {
-      "num" : 789,
-      "denom" : 1011
+    "feedId": "CER/FEED-ADA/v0",
+    "createdAt": "2024-07-29 01:00:00",
+    "body": {
+      "num": 789,
+      "denom": 1011
     }
   }
 ]

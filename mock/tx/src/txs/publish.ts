@@ -2,43 +2,36 @@ import { Command, Option } from "npm:commander";
 import { core, lucid } from "../../deps.ts";
 
 import * as fs from "../validators/fs.ts";
+import * as mod from "../mod.ts";
 
-export function cli(program : Command) {
-  program.command("publish")
-    .addOption(
-      new Option(
-        "--refs-at <name-or-address>",
-        "Where reference scripts have been uploaded and can be found",
-      ).makeOptionMandatory(),
-    )
-    .addOption(
-      new Option(
-        "--label <label>",
-        "Used to indentify the script reference. This is set at upload",
-      ).makeOptionMandatory(),
-    )
+export function cli(cmd: Command) {
+  const sub = cmd.command("publish");
+  mod.cli.addRefsAt(sub);
+  mod.cli.addFsLabel(sub);
+  sub
     .addOption(
       new Option(
         "--statements <path-to-json>",
         "Input Json of statements. See documentation on file-format.",
       ).makeOptionMandatory(),
     )
-    . action(async (opts, rest) => {
+    .action(async (opts, rest) => {
       const l = await core.cli.parseLucidWithWallet(rest.parent.opts());
-      const ws = core.wallets.wallets(l.network);
-      const refsAt = ws[opts.refsAt] ? ws[opts.refsAt].address : opts.refsAt
-      const label = opts.label
-      const input : fs.Statment[] = parseStatements(JSON.parse(Deno.readTextFileSync(opts.statements)))
-      tx(l, refsAt, label, input).then(res => core.txFinish.simple(l, res))
-    })
-  return program
+      const refsAt = core.cli.resolveAddress(l.network, opts.refsAt);
+      const label = mod.cli.parseFsLabel(opts.fsLabel);
+      const input: fs.Statment[] = parseStatements(
+        JSON.parse(Deno.readTextFileSync(opts.statements)),
+      );
+      tx(l, refsAt, label, input).then((res) => core.txFinish.simple(l, res));
+    });
+  return cmd;
 }
 
 export async function tx(
   l: lucid.Lucid,
   refsAt: string,
   label: string,
-  statements : fs.Statment[],
+  statements: fs.Statment[],
 ): Promise<lucid.Tx> {
   const ref =
     (await l.utxosAt(refsAt)).filter((u) =>
@@ -62,8 +55,8 @@ export async function txInner(
   const t = l
     .newTx()
     .readFrom([fsRef])
-    .mintAssets(mintAssets, fs.toData2("FsMint"))
-    // .attachMetadata(1226, metadata);
+    .mintAssets(mintAssets, fs.toData2("FsMint"));
+  // .attachMetadata(1226, metadata);
   statements.forEach((s) => {
     const dat: fs.Dat = {
       statement: s,
@@ -78,17 +71,15 @@ export async function txInner(
   return t;
 }
 
-
-function parseStatement(x: any ): fs.Statment {
-  const feedId = lucid.fromText(x.feedId)
-  const createdAt = BigInt(Date.parse(x.createdAt))
-  const num = BigInt(x.body.num)
-  const denom = BigInt(x.body.denom)
-  return { feedId, createdAt, body : {num, denom} }
+function parseStatement(x: any): fs.Statment {
+  const feedId = lucid.fromText(x.feedId);
+  const createdAt = BigInt(Date.parse(x.createdAt));
+  const num = BigInt(x.body.num);
+  const denom = BigInt(x.body.denom);
+  return { feedId, createdAt, body: { num, denom } };
 }
 
 function parseStatements(statements: any): fs.Statment[] {
-  if ('feedId' in statements) return [parseStatement(statements)]
-  return statements.map(parseStatement)
+  if ("feedId" in statements) return [parseStatement(statements)];
+  return statements.map(parseStatement);
 }
-

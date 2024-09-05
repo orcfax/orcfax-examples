@@ -39,7 +39,7 @@ validator(params: Params) {
       reference_inputs
         |> list.find(
             fn(i) {
-              ( i.output.value |> value.quantity_of(fsp_hash, orcfax_tokens.fsp()) ) == 1
+              ( i.output.value |> value.quantity_of(fsp_hash, orcfax_tokens.fsp_vali()) ) == 1
             },
           )
     expect fs_hash: ByteArray = fs_idat

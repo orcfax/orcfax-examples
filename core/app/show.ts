@@ -13,20 +13,22 @@ function cli() {
     )
     .version("0.0.1");
   const wallets = program.command("wallets");
-  core.cli.addNetworkOpts(wallets);
+  core.cli.addNetwork(wallets);
   wallets.action((opts, _) => {
     console.log(core.wallets.wallets(core.cli.parseNetwork(opts.network)));
   });
   const utxos = program.command("utxos");
-  core.cli.addLucidOpts(utxos);
-  utxos.option("--sum", "Sum utxos and display asset total only")  
+  core.cli.addLucid(utxos);
+  utxos.option("--sum", "Sum utxos and display asset total only");
   utxos.action(async (opts, _) => {
     const l = await core.cli.parseLucid(opts);
     Object.entries(core.wallets.wallets(l.network)).forEach(async ([k, v]) => {
       console.log(
         k,
-        await l.utxosAt(v.address).then(res => opts.sum ? core.lucidExtras.sumUtxos(res) : res)
-      )
+        await l.utxosAt(v.address).then((res) =>
+          opts.sum ? core.lucidExtras.sumUtxos(res) : res
+        ),
+      );
     });
   });
   return program;

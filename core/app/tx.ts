@@ -2,7 +2,7 @@
 
 import * as core from "../mod.ts";
 
-import { Command, } from "npm:commander";
+import { Command } from "npm:commander";
 
 function cli() {
   const program = new Command();
@@ -12,8 +12,9 @@ function cli() {
       "do a tx",
     )
     .version("0.0.1");
-  core.cli.addLucidWithWalletOpts(program);
-  core.txs.distribute.cli(program)
+  core.cli.addLucidWithWallet(program);
+  core.txs.distribute.cli(program);
+  core.txs.clear.cli(program);
   return program;
 }
 

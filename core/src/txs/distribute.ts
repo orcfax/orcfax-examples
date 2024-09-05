@@ -2,7 +2,7 @@ import { Command, Option } from "npm:commander";
 import { lucid } from "../../deps.ts";
 
 import { simple } from "../txFinish.ts";
-import { parseLucidWithWallet } from "../cli.ts";
+import { parseLucidWithWallet, resolveAddress } from "../cli.ts";
 import { wallets } from "../wallets.ts";
 
 export async function tx(
@@ -16,37 +16,25 @@ export async function tx(
   return utx;
 }
 
-export function cli(program : Command) {
+export function cli(program: Command) {
   const x = program.command("distribute");
   x
     .addOption(
       new Option(
         "--to <wallet0:amt0;wallet1:amt1;...>",
-        "Recipient(s) of funds. <wallet> can be wallet name or bech32 address.",
-      ),
+        "Recipient(s) of funds. <wallet> can be wallet name or bech32 address. Amount in ada",
+      ).makeOptionMandatory(),
     );
   x.action(async (opts, rest) => {
     const l = await parseLucidWithWallet(rest.parent.opts());
-    const ws = wallets(l.network);
-    let addressAmts;
-    if (opts.to) {
-      addressAmts = Object.fromEntries(
-        opts.to.split(";").map((x: string) => {
-          const [nameOrAddress, amt] = x.split(":");
-          const address = ws[nameOrAddress] ? ws[nameOrAddress].address : nameOrAddress
-          return [address, BigInt(amt) * 1_000_000n];
-        }),
-      );
-    } else {
-      const defaultAmt = 1_000_000_000n;
-      addressAmts = Object.fromEntries(
-        Object.entries(ws).filter(([k, _]) => k != opts.wallet).map((
-          [_, v],
-        ) => [v.address, defaultAmt]),
-      );
-    }
-    tx(l, addressAmts).then(t => simple(l, t))
+    const addressAmts = Object.fromEntries(
+      opts.to.split(";").map((x: string) => {
+        const [woa, amt] = x.split(":");
+        const address = resolveAddress(l.network, woa)
+        return [address, BigInt(amt) * 1_000_000n];
+      }),
+    );
+    tx(l, addressAmts).then((t) => simple(l, t));
   });
-  return program
+  return program;
 }
-

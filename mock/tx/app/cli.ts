@@ -3,10 +3,8 @@
 import { Command } from "npm:commander";
 
 import { core, lucid } from "../deps.ts";
-import { fspInit } from "../src/txs/fspInit.ts";
 
-const { addNetworkOpts, addProviderOpts, parseNetwork, parseProvider } =
-  core.cli;
+const { addNetwork, addProvider, parseNetwork, parseProvider } = core.cli;
 
 export function program() {
   const program = new Command();
@@ -14,8 +12,8 @@ export function program() {
     .name("oe-mock")
     .description("Orcfax-examples mock cli")
     .version("0.0.1");
-  addNetworkOpts(program);
-  addProviderOpts(program);
+  addNetwork(program);
+  addProvider(program);
   program.command("upload-fsp")
     .option("--seed <seed>", "a unique reference")
     .option("--host <host>", "the host address of the reference scripts");

@@ -2,29 +2,19 @@ import { Command, Option } from "npm:commander";
 import { core, lucid } from "../../deps.ts";
 
 import * as fs from "../validators/fs.ts";
+import * as mod from "../mod.ts";
 
-export function cli(program : Command) {
-  program.command("collect")
-    .addOption(
-      new Option(
-        "--refs-at <name-or-address>",
-        "Where reference scripts have been uploaded and can be found",
-      ).makeOptionMandatory(),
-    )
-    .addOption(
-      new Option(
-        "--label <label>",
-        "Used to indentify the script reference. This is set at upload",
-      ).makeOptionMandatory(),
-    )
-    . action(async (opts, rest) => {
-      const l = await core.cli.parseLucidWithWallet(rest.parent.opts());
-      const ws = core.wallets.wallets(l.network);
-      const refsAt = ws[opts.refsAt] ? ws[opts.refsAt].address : opts.refsAt
-      const label = opts.label
-      tx(l, refsAt, label).then(res => core.txFinish.simple(l, res))
-    })
-  return program
+export function cli(program: Command) {
+  const sub = program.command("collect");
+  mod.cli.addRefsAt(sub);
+  mod.cli.addFsLabel(sub);
+  sub.action(async (opts, rest) => {
+    const l = await core.cli.parseLucidWithWallet(rest.parent.opts());
+    const refsAt = core.cli.resolveAddress(l.network, opts.refsAt);
+    const label = mod.cli.parseFsLabel(opts.fsLabel);
+    tx(l, refsAt, label).then((res) => core.txFinish.simple(l, res));
+  });
+  return program;
 }
 
 export async function tx(
@@ -39,10 +29,9 @@ export async function tx(
   if (!ref) throw new Error("No ref found");
   const fsScript = ref.scriptRef!;
   const fsHash = l.utils.validatorToScriptHash(fsScript);
-  const expired = (await fs.getStates(l, fsHash )).slice(0, 50);
-  return txInner(l, ref, expired );
+  const expired = (await fs.getStates(l, fsHash)).slice(0, 50);
+  return txInner(l, ref, expired);
 }
-
 
 export async function txInner(
   l: lucid.Lucid,
@@ -56,7 +45,10 @@ export async function txInner(
   const t = l
     .newTx()
     .readFrom([fsRef])
-    .collectFrom(expired.map((u) => u.utxo), fs.toData3({ wrapper: lucid.Data.void() }))
+    .collectFrom(
+      expired.map((u) => u.utxo),
+      fs.toData3({ wrapper: lucid.Data.void() }),
+    )
     .addSigner(await l.wallet.address());
   if (expired.length > 0) {
     t.mintAssets(mintAssets, fs.toData2("FsBurn"));

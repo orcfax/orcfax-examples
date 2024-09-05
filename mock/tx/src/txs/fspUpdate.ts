@@ -1,46 +1,29 @@
-import { Command, Option } from "npm:commander";
-import { assert } from "jsr:@std/assert";
+import { Command } from "npm:commander";
 import { core, lucid } from "../../deps.ts";
 
 import * as fsp from "../validators/fsp.ts";
+import * as mod from "../mod.ts";
 
-export function cli(program : Command) {
-  program.command("fsp-update")
-    .addOption(
-      new Option(
-        "--refs-at <name-or-address>",
-        "Where reference scripts have been uploaded and can be found",
-      ).makeOptionMandatory(),
-    )
-    .addOption(
-      new Option(
-        "--label <label>",
-        "Used to indentify the script reference. Here it is the seed",
-      ).makeOptionMandatory(),
-    )
-    .addOption(
-      new Option(
-        "--fs-hash <base16>",
-        "Hash of the fs script. Will be contained in the datum",
-      ).makeOptionMandatory()
-    )
-    . action(async (opts, rest) => {
-      const l = await core.cli.parseLucidWithWallet(rest.parent.opts());
-      const ws = core.wallets.wallets(l.network);
-      const refsAt = ws[opts.refsAt] ? ws[opts.refsAt].address : opts.refsAt
-      const label = opts.label
-      const fsHash = opts.fsHash
-      assert(fsHash.length == 56, `fsHash must be 28 bytes (56 chars in base16). Founnd ${fsHash.length} chars`)
-      tx(l, refsAt, label, fsHash).then(res => core.txFinish.simple(l, res))
-    })
-  return program
+export function cli(cmd: Command) {
+  const sub = cmd.command("fsp-update");
+  mod.cli.addRefsAt(sub);
+  mod.cli.addFspLabel(sub);
+  mod.cli.addFsHash(sub);
+  sub.action(async (opts, rest) => {
+    const l = await core.cli.parseLucidWithWallet(rest.parent.opts());
+    const refsAt = core.cli.resolveAddress(l.network, opts.refsAt);
+    const label = mod.cli.parseFspLabel(opts.fspLabel);
+    const fsHash = mod.cli.parseFsHash(opts.fsHash);
+    tx(l, refsAt, label, fsHash).then((res) => core.txFinish.simple(l, res));
+  });
+  return cmd;
 }
 
 export async function tx(
   l: lucid.Lucid,
   refsAt: string,
   label: string,
-  payload : string,
+  payload: string,
 ): Promise<lucid.Tx> {
   const ref =
     (await l.utxosAt(refsAt)).filter((u) =>
