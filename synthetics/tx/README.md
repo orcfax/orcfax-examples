@@ -1,20 +1,20 @@
 # Synthetics txs
 
-## Setup 
+## Setup
 
 ### CER feed
 
-We're using a `CER` type feed to create a collateralised synthetic asset. 
+We're using a `CER` type feed to create a collateralised synthetic asset.
 
 To be able to use a `CER` type feed, either:
 
-- Use an Orcfax deployment. (Details on deployments can be found [here][deployments])
+- Use an Orcfax deployment. (Details on deployments can be found
+  [here][deployments])
 - Setup a mock deployment. Details found in [mock][./../../mock/tx/README.md]
 
 [deployments]: todo
 
-Find the FSP hash, and choose the `CER` feed ID. 
-The feed ID will be of the form 
+Find the FSP hash, and choose the `CER` feed ID. The feed ID will be of the form
 
 ```sh
 CER/{{BASE}}-{{QUOTE}}/{{version-info}}
@@ -22,7 +22,7 @@ CER/{{BASE}}-{{QUOTE}}/{{version-info}}
 
 We require ada to be either the base or the quote currency of the feed.
 
-### Setup aliases 
+### Setup aliases
 
 For example:
 
@@ -32,13 +32,13 @@ alias status="./app/status.ts --network preview --provider blockfrost "
 export params="export params=" --fsp-hash <fsp-hash> --currency USD --ada-is-base "
 ```
 
-### Upload 
+### Upload
 
 ```sh
 tx admin upload $params
 ```
 
-### Distribute 
+### Distribute
 
 ```sh
 tx admin distribute --to "user:200"
@@ -46,11 +46,12 @@ tx admin distribute --to "user:200"
 
 ### Get statements
 
-If you're using the mock publisher, make some new statements of the relevant feeds.
+If you're using the mock publisher, make some new statements of the relevant
+feeds.
 
 ## Use
 
-### Mint 
+### Mint
 
 ```sh
 tx user mint $params --amount 100
@@ -62,4 +63,4 @@ tx user mint $params --amount 100
 tx user burn $params
 ```
 
-By default it will burn all the token it can. 
+By default it will burn all the token it can.

@@ -191,7 +191,7 @@ export function parseLucidWithWallet(
   });
 }
 
-export function resolveAddress(network : lucid.Network, woa : string) : string {
+export function resolveAddress(network: lucid.Network, woa: string): string {
   const ws = wallets(network);
   return ws[woa] ? ws[woa].address : woa;
 }

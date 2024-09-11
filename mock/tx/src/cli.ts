@@ -18,12 +18,12 @@ export function addFsLabel(cmd: Command): Command {
       new Option(
         "--fs-label <fsLabel>",
         "Used to indentify the fs script reference. Here it is the seed",
-      ).default("")
+      ).default(""),
     );
 }
 
 export function parseFsLabel(x: string): string {
-  return x ? x : `${Deno.env.get("USER")}-fs`
+  return x ? x : `${Deno.env.get("USER")}-fs`;
 }
 
 export function addFspLabel(cmd: Command): Command {
@@ -32,12 +32,12 @@ export function addFspLabel(cmd: Command): Command {
       new Option(
         "--fsp-label <fspLabel>",
         "Used to indentify the fsp script reference. Here it is the seed",
-      ).default("")
+      ).default(""),
     );
 }
 
 export function parseFspLabel(x: string): string {
-  return x ? x : `${Deno.env.get("USER")}-fsp`
+  return x ? x : `${Deno.env.get("USER")}-fsp`;
 }
 
 export function addFsHash(cmd: Command): Command {
@@ -46,7 +46,7 @@ export function addFsHash(cmd: Command): Command {
       new Option(
         "--fsp-hash <base16>",
         "Used to indentify the fs script reference. Here it is the seed",
-      ).makeOptionMandatory()
+      ).makeOptionMandatory(),
     );
 }
 
@@ -64,7 +64,7 @@ export function addCurrency(cmd: Command): Command {
       new Option(
         "--currency <currency>",
         "The currency as it appears in the orcfax CER feed id. eg `USD` for `CER/ADA-USD/",
-      ).makeOptionMandatory()
+      ).makeOptionMandatory(),
     );
 }
 
@@ -78,21 +78,23 @@ export function addAdaIsBase(cmd: Command): Command {
       new Option(
         "--ada-is-base",
         "Ada is base if it appears first in the feed-id eg `CER/ADA-USD/`, otherwise ada is quote",
-      ).default(false)
+      ).default(false),
     )
     .addOption(
       new Option(
         "--ada-is-quote",
         "Ada is quote if it appears second in the feed-id eg `CER/FACT-ADA/`, otherwise ada is base",
-      ).default(false)
-    )
+      ).default(false),
+    );
 }
 
-export function parseAdaIsBase(adaIsBase: boolean , adaIsQuote: boolean) {
+export function parseAdaIsBase(adaIsBase: boolean, adaIsQuote: boolean) {
   if ((adaIsBase && adaIsQuote) || (!adaIsBase && !adaIsQuote)) {
-    throw new Error("Exactly one of --ada-is-base and --ada-is-quote is required")
+    throw new Error(
+      "Exactly one of --ada-is-base and --ada-is-quote is required",
+    );
   }
-  return adaIsBase
+  return adaIsBase;
 }
 
 export function addLabel(cmd: Command): Command {
@@ -105,7 +107,7 @@ export function addLabel(cmd: Command): Command {
 }
 
 export function parseLabel(x: string): string {
-  return lucid.Data.to<string>(lucid.fromText(x))
+  return lucid.Data.to<string>(lucid.fromText(x));
 }
 
 export function addAmount(cmd: Command): Command {
@@ -114,11 +116,10 @@ export function addAmount(cmd: Command): Command {
       new Option(
         "--amount <amt>",
         "The amount of token to mint or burn",
-      ).makeOptionMandatory()
+      ).makeOptionMandatory(),
     );
 }
 
 export function parseAmount(x: string): bigint {
   return BigInt(x) * 1_000_000n;
 }
-

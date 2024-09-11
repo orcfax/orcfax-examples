@@ -1,6 +1,6 @@
 #!/usr/bin/env -S deno run -A
 
-import { Command, } from "npm:commander";
+import { Command } from "npm:commander";
 import { core } from "../deps.ts";
 import * as mod from "../mod.ts";
 

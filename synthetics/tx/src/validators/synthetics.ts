@@ -15,24 +15,37 @@ export function toData3(x: Red3): string {
   return lucid.Data.to<Red3>(x, Red3);
 }
 
-export function mkParams(fspHash : string, currency : string, adaIsBase : boolean): Params {
-  return [{ fspHash , currency, adaIsBase }];
+export function mkParams(
+  fspHash: string,
+  currency: string,
+  adaIsBase: boolean,
+): Params {
+  return [{ fspHash, currency, adaIsBase }];
 }
 
-export function mkScript(fspHash : string, currency : string, adaIsBase : boolean) {
-  const script = new bp.SyntheticsTwo(mkParams(fspHash , currency, adaIsBase)[0]);
+export function mkScript(
+  fspHash: string,
+  currency: string,
+  adaIsBase: boolean,
+) {
+  const script = new bp.SyntheticsTwo(
+    mkParams(fspHash, currency, adaIsBase)[0],
+  );
   if ((script === undefined) || (script == null)) throw "no script at ref";
   return script;
 }
 
-export function unit(validatorHash: string, currency :  string,) {
+export function unit(validatorHash: string, currency: string) {
   return `${validatorHash}${tokens.synthetic(currency)}`;
 }
 
-export function asset(validatorHash: string, currency: string, amt : bigint): lucid.Assets {
+export function asset(
+  validatorHash: string,
+  currency: string,
+  amt: bigint,
+): lucid.Assets {
   return Object.fromEntries([[unit(validatorHash, currency), amt]]);
 }
-
 
 // ADDRESS
 

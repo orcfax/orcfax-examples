@@ -30,7 +30,7 @@ export function cli(program: Command) {
     const addressAmts = Object.fromEntries(
       opts.to.split(";").map((x: string) => {
         const [woa, amt] = x.split(":");
-        const address = resolveAddress(l.network, woa)
+        const address = resolveAddress(l.network, woa);
         return [address, BigInt(amt) * 1_000_000n];
       }),
     );

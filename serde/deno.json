@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "serde" : "deno run -A src/main.ts",
+    "serde": "deno run -A src/main.ts"
   },
   "lint": {
     "rules": {

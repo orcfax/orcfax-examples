@@ -26,23 +26,23 @@ export function cli(cmd: Command) {
       const refsAt = core.cli.resolveAddress(l.network, opts.refsAt);
       const label = mod.cli.parseFsLabel(opts.fsLabel);
 
-      let input :  fs.Statment[] | null  = null;
+      let input: fs.Statment[] | null = null;
 
       if (opts.newCer) {
-        const [base, quote, num, denom] = opts.newCer.split(',')
-        const now = new Date()
+        const [base, quote, num, denom] = opts.newCer.split(",");
+        const now = new Date();
         input = [parseStatement({
-          feedId : `CER/${base}-${quote}/v0`,
+          feedId: `CER/${base}-${quote}/v0`,
           createdAt: now,
-          body : { num, denom }
-        })]
+          body: { num, denom },
+        })];
       } else if (opts.fromFile) {
         parseStatements(
           JSON.parse(Deno.readTextFileSync(opts.fromFile)),
         );
       }
 
-      if (input == null) throw new Error("No statements provided")
+      if (input == null) throw new Error("No statements provided");
       tx(l, refsAt, label, input).then((res) => core.txFinish.simple(l, res));
     });
   return cmd;
@@ -93,7 +93,7 @@ export async function txInner(
 }
 
 function parseStatement(x: any): fs.Statment {
-  console.log(x)
+  console.log(x);
   const feedId = lucid.fromText(x.feedId);
   const createdAt = BigInt(Date.parse(x.createdAt));
   const num = BigInt(x.body.num);
