@@ -5,53 +5,40 @@ import { core, lucid } from "../deps.ts";
 import * as mod from "../mod.ts";
 
 function cli() {
-  const program = new Command();
-  program
+  const cmd = new Command();
+  cmd
     .name("status")
     .description(
       "get dapp status",
     )
     .version("0.0.1");
-  core.cli.addLucidOpts(program);
-  program
-    .addOption(
-      new Option(
-        "--refs-at <name-or-address>",
-        "Where reference scripts have been uploaded and can be found",
-      ).makeOptionMandatory(),
-    )
-    .addOption(
-      new Option(
-        "--fs-label <fs-label>",
-        "Used to indentify the fs script reference. Here it is the seed",
-      ).makeOptionMandatory(),
-    )
-    .addOption(
-      new Option(
-        "--fsp-label <fsp-label>",
-        "Used to indentify the fsp script reference. Here it is the seed",
-      ).makeOptionMandatory(),
-    )
-    . action(async (opts, rest) => {
+  core.cli.addLucid(cmd);
+  mod.cli.addRefsAt(cmd);
+  mod.cli.addFspHash(cmd);
+  mod.cli.addFeedId(cmd);
+  cmd. action(async (opts, rest) => {
       const l = await core.cli.parseLucid(opts);
-      const ws = core.wallets.wallets(l.network);
-      const refsAt = ws[opts.refsAt] ? ws[opts.refsAt].address : opts.refsAt
-      const fsLabel = opts.fsLabel
-      const fspLabel = opts.fspLabel
-      status(l, refsAt, fsLabel, fspLabel)
+      const refsAt = core.cli.resolveAddress(l.network, opts.refsAt);
+      const fspHash = mod.cli.parseFspHash(opts.fspHash);
+      const feedId = mod.cli.parseFeedId(opts.feedId)
+      status(l, refsAt, fspHash, feedId)
     })
-  return program
+  return cmd
 }
 
 async function status(
   l : lucid.Lucid,
   refsAt : string,
-  fsLabel: string,
-  fspLabel: string,
+  fspHash: string,
+  feedId: string,
 ) {
   const refs = await l.utxosAt(refsAt) 
-  const fsRef = refs.find(u => u.datum === lucid.Data.to<string>(lucid.fromText(fsLabel)))
-  if (!fsRef) throw new Error("No ref found");
+  const script = mod.validators.synthetics.mkScript(fspLabel, feedId)
+  const scriptHash = l.utils.validatorToScriptHash(script)
+  const ref = refs.find(u => u.scriptRef && l.utils.validatorToScriptHash(u.scriptRef) == scriptHash)
+  console.log(refs.map(u => u.scriptRef && l.utils.validatorToScriptHash(u.scriptRef)))
+  console.log(scriptHash)
+  if (!ref) throw new Error("No ref found");
   const fspRef = refs.find(u => u.datum === lucid.Data.to<string>(lucid.fromText(fspLabel)))
   if (!fspRef) throw new Error("No ref found");
   if (refs.length > 2) {

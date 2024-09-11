@@ -5,24 +5,20 @@ import { core } from "../deps.ts";
 import * as mod from "../mod.ts";
 
 function cli() {
-  const program = new Command();
-  program
+  const cmd = new Command();
+  cmd
     .name("tx")
     .description(
       "do a tx",
     )
     .version("0.0.1");
-  core.cli.addLucidWithWalletOpts(program);
-  core.txs.distribute.cli(program);
-  core.txs.clear.cli(program);
-  mod.txs.uploadFs.cli(program);
-  mod.txs.publish.cli(program);
-  mod.txs.collect.cli(program);
-  mod.txs.uploadFsp.cli(program);
-  mod.txs.fspInit.cli(program);
-  mod.txs.fspUpdate.cli(program);
-  mod.txs.fspEnd.cli(program);
-  return program;
+  core.cli.addLucidWithWallet(cmd);
+  core.txs.distribute.cli(cmd);
+  core.txs.clear.cli(cmd);
+  mod.txs.upload.cli(cmd);
+  mod.txs.mint.cli(cmd);
+  mod.txs.burn.cli(cmd);
+  return cmd;
 }
 
 function main() {

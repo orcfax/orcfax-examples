@@ -1,3 +1,4 @@
+use aiken/cbor
 use aiken/dict
 use aiken/list
 use aiken/transaction.{
@@ -16,12 +17,14 @@ use synthetics/constants
 
 type Params {
   fsp_hash: ByteArray,
-  feed_id: ByteArray,
+  currency: ByteArray,
+  ada_is_base: Bool,
 }
 
 validator(params: Params) {
   fn two(_red: Data, ctx: ScriptContext) {
-    let Params { fsp_hash, feed_id, } = params
+    let Params { fsp_hash, currency, ada_is_base, } = params
+    let feed_id = tokens.mk_feed_id(currency, ada_is_base)
     let ScriptContext {
       transaction: Transaction {
         reference_inputs,
@@ -78,7 +81,6 @@ validator(params: Params) {
     expect feed_id_ |> starts_with(feed_id)
     // End: Find Fs, and verify Statement
 
-
     // START: Rest of the logic is dapp specific
     expect Mint(own_hash) = purpose
     expect [Pair(name, qty)] =
@@ -87,20 +89,26 @@ validator(params: Params) {
         |> value.tokens(own_hash)
         |> dict.to_pairs()
     expect
-      name == tokens.synthetic(feed_id)
+      name == tokens.synthetic(currency)
 
+    // Handle both cases: ada is base; ada is quote.
+    let (a,b) = if ada_is_base {
+      (num, denom)
+    } else {
+      (denom, num)
+    }
     if qty > 0 {
       // Deposit case
       let ada_if_own = ada_if_own_output(own_hash)
       let deposit = outputs |> list.foldl(0, fn(o, tot) { ada_if_own(o) + tot })
       // The value of the deposit must be greater than the value of tokens minted
-      deposit * num > qty * denom
+      deposit * a >= qty * b
     } else {
       // Claim case 
       let ada_if_own = ada_if_own_input(own_hash)
       let deposit = inputs |> list.foldl(0, fn(o, tot) { ada_if_own(o) + tot })
       // The value of the deposit must be less than the value of tokens burned
-      deposit * num < -qty * denom
+      deposit * a <= -qty * b
     }
     // END: Rest of the logic is dapp specific
   }
@@ -114,11 +122,11 @@ validator(params: Params) {
       inputs |> list.find(fn(i) { i.output_reference == own_oref })
     expect ScriptCredential(own_hash) =
       own_input.output.address.payment_credential
-    expect [Pair(_, qty)] =
-      mint
+    let own_tokens = mint
         |> value.from_minted_value
         |> value.tokens(own_hash)
         |> dict.to_pairs()
+    expect [Pair(_, qty)] = own_tokens
     qty < 0
   }
 }

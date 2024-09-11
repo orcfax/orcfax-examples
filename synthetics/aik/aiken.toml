@@ -17,5 +17,5 @@ source = "github"
 
 [[dependencies]]
 name = "orcfax/orcfax-aiken"
-version = "main"
+version = "f9c0241f6705098d8492154be792fbd62f1a96c5"
 source = "github"

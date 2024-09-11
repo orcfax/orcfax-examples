@@ -75,7 +75,8 @@ export async function getState(
   l: lucid.Lucid,
   validatorHash: string,
 ): Promise<lucid.UTxO> {
-  const u = await l.utxoByUnit(valiUnit(validatorHash));
+  // const u = await l.utxoByUnit(valiUnit(validatorHash));
+  const u = await l.utxosAtWithUnit(address(l, validatorHash), valiUnit(validatorHash)).then(res => res[0]);
   if (typeof u !== "object") throw "Bad utxo";
   return u;
 }
@@ -84,7 +85,8 @@ export async function getAuth(
   l: lucid.Lucid,
   validatorHash: string,
 ): Promise<lucid.UTxO> {
-  const u = await l.utxoByUnit(authUnit(validatorHash));
+  // const u = await l.utxoByUnit(authUnit(validatorHash));
+  const u = await l.utxosAtWithUnit(await l.wallet.address(), authUnit(validatorHash)).then(res => res[0]);
   if (typeof u !== "object") throw "Bad utxo";
   return u;
 }

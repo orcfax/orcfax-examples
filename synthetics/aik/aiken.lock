@@ -8,7 +8,7 @@ source = "github"
 
 [[requirements]]
 name = "orcfax/orcfax-aiken"
-version = "main"
+version = "f9c0241f6705098d8492154be792fbd62f1a96c5"
 source = "github"
 
 [[packages]]
@@ -19,9 +19,8 @@ source = "github"
 
 [[packages]]
 name = "orcfax/orcfax-aiken"
-version = "main"
+version = "f9c0241f6705098d8492154be792fbd62f1a96c5"
 requirements = []
 source = "github"
 
 [etags]
-"orcfax/orcfax-aiken@main" = [{ secs_since_epoch = 1725546981, nanos_since_epoch = 367909700 }, "2ed26bd4d61dcceed69acd697141c91c20bd80cd55f0fb61499c16ce0b732b99"]
