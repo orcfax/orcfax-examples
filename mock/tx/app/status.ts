@@ -3,7 +3,6 @@
 import { Command, } from "npm:commander";
 import { core, lucid } from "../deps.ts";
 import * as mod from "../mod.ts";
-import { FsRationalStatement } from "../src/blueprint.ts";
 import { Rational } from "../src/validators/fs.ts";
 
 function cli() {
