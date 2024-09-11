@@ -6,17 +6,32 @@
 
 This repo contains some demo dapps that utilize Orcfax oracle feeds.
 
-## Setup
-
-### Dependencies
+## About
 
 This repo uses:
 
-- [aiken](https://aiken-lang.org/)
-- [deno](https://deno.com/)
+- [aiken](https://aiken-lang.org/) for on-chain code
+- [deno](https://deno.com/) for off-chain code
 
 There is a [nix flake](https://nixos.wiki/wiki/Flakes) with a devshell including
 these dependencies.
+
+### Organization
+
+```sample
+$tree -L 1
+.
+├── core        # shared code
+├── flake.lock  
+├── flake.nix
+├── mock        # A mock publisher
+├── README.md   
+└── synthetics  # A toy synthetic assets dapp using orcfax
+```
+
+Other toy dapps will be included as they are created.
+
+## General Setup
 
 ### Dotenv
 
@@ -54,11 +69,11 @@ where `<network>` is either `PREVIEW`, `PREPROD`, or `MAINNET`.
 Kupmios is a bit trickier since you must manually update Kupo to follow new
 important addresses.
 
-TODO
+(Untested)
 
 #### Emulator
 
-TODO
+(Not yet supported)
 
 ### Wallets
 
@@ -95,7 +110,15 @@ For testnets, see the faucet
 [here](https://docs.cardano.org/cardano-testnets/tools/faucet/) for details on
 how to fund wallets.
 
-## Usage
+To check utxos in the wallets use
+
+```sh
+./app/show.ts utxos
+```
+
+`--sum` will condense the output.
+
+## Dapps
 
 ### Navigating dapps
 
@@ -117,6 +140,11 @@ with dapp specific instructions.
 
 Executables can be found in the `./app` subdirectory. There are executables.
 
+### Using orcfax
+
+You can either use Orcfax via an existing deployment, or setup a mock (see
+`./mock`).
+
 ### Using aliases
 
 Executables tend to have a lot of options, and these are exposed as cli options.
@@ -129,12 +157,4 @@ example
 
 ```sh
 alias tx="./app/tx.ts --network preview --provider blockfrost --wallet "
-tx admin distribute --to publisher:100
-export refs=" --refs-at store --label my-fs-script "
-tx publisher publish $refs --statements example.json
 ```
-
-## Other resources
-
-1. Core
-2. Serde
