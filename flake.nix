@@ -42,6 +42,7 @@
             packages = with pkgs; [
               inputs'.aiken.packages.aiken
               deno
+              just
             ];
           };
         };
