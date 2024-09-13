@@ -4,7 +4,7 @@
 
 > ⚠️ These dapps are for demonstration purposes only
 
-This repo contains some demo dapps that utilize Orcfax oracle feeds.
+This repo contains some demo dApps that utilize Orcfax oracle feeds.
 
 ## About
 
@@ -26,10 +26,10 @@ $tree -L 1
 ├── flake.nix
 ├── mock        # A mock publisher
 ├── README.md   
-└── synthetics  # A toy synthetic assets dapp using orcfax
+└── synthetics  # A toy synthetic assets dApp using Orcfax
 ```
 
-Other toy dapps will be included as they are created.
+Other toy dApps will be included as they are created.
 
 ## General Setup
 
@@ -39,21 +39,21 @@ We use the reasonably standard convention of `.env` for secret variables. It is
 ignored by git.
 
 The `.env` file needs to be present in the current working directory. Usually
-this will be mean creating a new `<dapp>/tx/.env` file for each dapp you
+this will mean creating a new `<dapp>/tx/.env` file for each dApp you
 interact with.
 
 ### Provider setup
 
-Dapps need chain data. This data comes from a data provider. There are several
+DApps need chain data. This data comes from a data provider. There are several
 options.
 
 #### Blockfrost
 
-To use Blockfrost you will need an api key, or be
+To use Blockfrost you will need an API key, or be
 [RYO](https://github.com/blockfrost/blockfrost-backend-ryo). In the former case,
 follow the instructions
 [here](https://blockfrost.dev/docs/overview/getting-started). In the latter case
-still set a Blockfrost key even if it is not used. (Lucid doesn't not cope well
+still set a Blockfrost key even if it is not used. (Lucid doesn't cope well
 if it is absent.)
 
 The Blockfrost key must be in the `.env` file with key of the form
@@ -110,7 +110,7 @@ For testnets, see the faucet
 [here](https://docs.cardano.org/cardano-testnets/tools/faucet/) for details on
 how to fund wallets.
 
-To check utxos in the wallets use
+To check UTXOs in the wallets use
 
 ```sh
 ./app/show.ts utxos
@@ -118,11 +118,11 @@ To check utxos in the wallets use
 
 `--sum` will condense the output.
 
-## Dapps
+## DApps
 
-### Navigating dapps
+### Navigating dApps
 
-Each dapp has its own subdirectory structured as follows:
+Each dApp has its own subdirectory structured as follows:
 
 ```
 $tree -L 1
@@ -133,14 +133,14 @@ $tree -L 1
 ```
 
 The interactive part is `./tx`. This acts as the working directory for
-explanations on interaction with the dapp. Contained in this part is a README
-with dapp specific instructions.
+explanations on interaction with the dApp. Contained in this part is a README
+with dApp specific instructions.
 
 ### Executables
 
-Executables can be found in the `./app` subdirectory. There are executables.
+Executables can be found in the `./app` subdirectory.
 
-### Using orcfax
+### Using Orcfax
 
 You can either use Orcfax via an existing deployment, or setup a mock (see
 `./mock`).
