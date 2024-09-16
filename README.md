@@ -91,6 +91,7 @@ append it an `.env` would look something like.
 ```sh
 ./core/app/mkKeys.ts <optional-wallet-name> >> .env
 ```
+An alphanumeric wallet name is expected.
 
 Each dapp has its own required wallet names it expects. See `.env.example`
 and/or the respective README.md for details.
@@ -106,6 +107,8 @@ following
 ./app/show.ts wallets
 ```
 
+The network must be specified using `--network <network>`.
+
 For testnets, see the faucet
 [here](https://docs.cardano.org/cardano-testnets/tools/faucet/) for details on
 how to fund wallets.
@@ -115,6 +118,9 @@ To check UTXOs in the wallets use
 ```sh
 ./app/show.ts utxos
 ```
+
+The network must be specified using `--network <network>`, and
+the provider must be specified using `--provider <provider>`.
 
 `--sum` will condense the output.
 
@@ -149,7 +155,7 @@ You can either use Orcfax via an existing deployment, or setup a mock (see
 
 Executables tend to have a lot of options, and these are exposed as cli options.
 
-For example, you'll need a provider, such as Blockfrost of Kupmios. (See
+For example, you'll need a provider, such as `blockfrost` of `kupmios`. (See
 [provider setup](#provider-setup) on how to setup providers.)
 
 Aliases and variables can save your wrists and keep the interactions sane. For

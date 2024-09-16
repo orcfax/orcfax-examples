@@ -29,7 +29,7 @@ For example:
 ```sh
 alias tx="./app/tx.ts --network preview --provider blockfrost --wallet "
 alias status="./app/status.ts --network preview --provider blockfrost "
-export params="export params=" --fsp-hash <fsp-hash> --currency USD --ada-is-base "
+export params="export params=" --fsp-hash <fsp-hash> --currency USD --ada-is-base 
 ```
 
 ### Upload
