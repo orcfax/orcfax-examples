@@ -73,7 +73,7 @@ tx admin distribute --to "publisher:100"
 7. Publish statements from file:
 
 ```sh
-tx publisher publish --from-file ./examples.json
+tx publisher publish --from-file ./example.json
 ```
 
 Repeat this if desired. You can now use these statements in other dapps.
@@ -85,7 +85,8 @@ There's a shortcut for publishing a single CER feed-type statement.
 tx publisher publish --new-cer BASE,QUOTE,NUM,DENOM
 ```
 
-This will publish a single statement with created at field set to `now`
+`NUM` and `DENOM` must be integers.
+This will publish a single statement with created at field set to `now`.
 
 8. Collect statements
 
