@@ -37,7 +37,7 @@ export function cli(cmd: Command) {
           body: { num, denom },
         })];
       } else if (opts.fromFile) {
-        parseStatements(
+        input = parseStatements(
           JSON.parse(Deno.readTextFileSync(opts.fromFile)),
         );
       }
@@ -98,6 +98,7 @@ function parseStatement(x: any): fs.Statment {
   const createdAt = BigInt(Date.parse(x.createdAt));
   const num = BigInt(x.body.num);
   const denom = BigInt(x.body.denom);
+  console.log({ feedId, createdAt, body: { num, denom } });
   return { feedId, createdAt, body: { num, denom } };
 }
 
