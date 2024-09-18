@@ -155,7 +155,7 @@ You can either use Orcfax via an existing deployment, or setup a mock (see
 
 Executables tend to have a lot of options, and these are exposed as cli options.
 
-For example, you'll need a provider, such as `blockfrost` of `kupmios`. (See
+For example, you'll need a provider, such as Blockfrost of Kupmios. (See
 [provider setup](#provider-setup) on how to setup providers.)
 
 Aliases and variables can save your wrists and keep the interactions sane. For

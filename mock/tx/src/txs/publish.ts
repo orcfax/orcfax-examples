@@ -97,7 +97,6 @@ function parseStatement(x: any): fs.Statment {
   const createdAt = BigInt(Date.parse(x.createdAt));
   const num = BigInt(x.body.num);
   const denom = BigInt(x.body.denom);
-  console.log({ feedId, createdAt, body: { num, denom } });
   return { feedId, createdAt, body: { num, denom } };
 }
 
