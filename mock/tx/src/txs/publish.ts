@@ -31,11 +31,13 @@ export function cli(cmd: Command) {
       if (opts.newCer) {
         const [base, quote, num, denom] = opts.newCer.split(",");
         const now = new Date();
-        input = [parseStatement({
+        const statement = {
           feedId: `CER/${base}-${quote}/v0`,
           createdAt: now,
           body: { num, denom },
-        })];
+        }
+        console.log(statement)
+        input = [parseStatement(statement)];
       } else if (opts.fromFile) {
         input = parseStatements(
           JSON.parse(Deno.readTextFileSync(opts.fromFile)),
@@ -97,7 +99,6 @@ function parseStatement(x: any): fs.Statment {
   const createdAt = BigInt(Date.parse(x.createdAt));
   const num = BigInt(x.body.num);
   const denom = BigInt(x.body.denom);
-  console.log({ feedId, createdAt, body: { num, denom } });
   return { feedId, createdAt, body: { num, denom } };
 }
 
