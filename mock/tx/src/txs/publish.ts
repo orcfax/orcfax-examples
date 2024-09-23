@@ -31,13 +31,15 @@ export function cli(cmd: Command) {
       if (opts.newCer) {
         const [base, quote, num, denom] = opts.newCer.split(",");
         const now = new Date();
-        input = [parseStatement({
+        const statement = {
           feedId: `CER/${base}-${quote}/v0`,
           createdAt: now,
           body: { num, denom },
-        })];
+        }
+        console.log(statement)
+        input = [parseStatement(statement)];
       } else if (opts.fromFile) {
-        parseStatements(
+        input = parseStatements(
           JSON.parse(Deno.readTextFileSync(opts.fromFile)),
         );
       }
@@ -93,7 +95,6 @@ export async function txInner(
 }
 
 function parseStatement(x: any): fs.Statment {
-  console.log(x);
   const feedId = lucid.fromText(x.feedId);
   const createdAt = BigInt(Date.parse(x.createdAt));
   const num = BigInt(x.body.num);
