@@ -25,9 +25,10 @@ function cli() {
     const l = await core.cli.parseLucid(opts);
     const refsAt = core.cli.resolveAddress(l.network, opts.refsAt);
     const fspLabel = mod.cli.parseFspLabel(opts.fspLabel);
-    const fsLabel = (!opts.fspLabel || opts.fsLabel)
-      ? mod.cli.parseFsLabel(opts.fsLabel)
-      : null;
+    const fsLabel =
+      !opts.fspLabel || opts.fsLabel
+        ? mod.cli.parseFsLabel(opts.fsLabel)
+        : null;
     status(l, refsAt, fsLabel, fspLabel);
   });
   return cmd;
@@ -128,9 +129,11 @@ async function status(
     console.log("no fsp ref found");
   }
   const mFsRef = fspI?.fsHash
-    ? refs.find((u) =>
-      u.scriptRef && l.utils.validatorToScriptHash(u.scriptRef) == fspI.fsHash
-    )
+    ? refs.find(
+        (u) =>
+          u.scriptRef &&
+          l.utils.validatorToScriptHash(u.scriptRef) == fspI.fsHash,
+      )
     : undefined;
   const fsI0 = mFsRef ? await fsInfo(l, mFsRef) : null;
   if (fsI0) {

@@ -6,8 +6,11 @@ export async function tx(
   hostAddress: string,
   tag?: string,
 ): Promise<lucid.Tx> {
-  return l.newTx()
-    .payToAddressWithData(hostAddress, { scriptRef: script, inline: tag }, {
+  return l.newTx().payToAddressWithData(
+    hostAddress,
+    { scriptRef: script, inline: tag },
+    {
       lovelace: 1n,
-    });
+    },
+  );
 }

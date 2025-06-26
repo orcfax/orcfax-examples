@@ -18,12 +18,13 @@ export function cli(cmd: Command) {
     const amt = mod.cli.parseAmount(opts.amount);
     const script = v.mkScript(fspHash, currency, adaIsBase);
     const ownHash = l.utils.validatorToScriptHash(script);
-    const ref = (await l.utxosAt(refsAt)).find((u) =>
-      u.scriptRef && l.utils.validatorToScriptHash(u.scriptRef) == ownHash
+    const ref = (await l.utxosAt(refsAt)).find(
+      (u) =>
+        u.scriptRef && l.utils.validatorToScriptHash(u.scriptRef) == ownHash,
     );
     if (!ref) throw new Error("No ref found");
     return tx(l, ref, v.mkParams(fspHash, currency, adaIsBase), amt).then((t) =>
-      core.txFinish.simple(l, t)
+      core.txFinish.simple(l, t),
     );
   });
   return sub;
@@ -52,17 +53,15 @@ export async function tx(
   const lb = now - 10 * 60 * 1000;
   const ub = now + 10 * 60 * 1000;
 
-  const s0 = states.filter(
-    (s) => s.feedId.startsWith(lucid.toText(feedId)),
-  );
-  const s1 = s0.filter((s) =>
-    (lb <= Number(s.createdAt)) && (ub >= Number(s.createdAt))
+  const s0 = states.filter((s) => s.feedId.startsWith(lucid.toText(feedId)));
+  const s1 = s0.filter(
+    (s) => lb <= Number(s.createdAt) && ub >= Number(s.createdAt),
   );
   const statement = s1[0];
 
   const body = statement.body;
   const [a, b] = adaIsBase ? [body.num, body.denom] : [body.denom, body.num];
-  const synthAmt = amt * a / b;
+  const synthAmt = (amt * a) / b;
 
   const mintAssets = v.asset(ownHash, params[0].currency, synthAmt);
   const red = lucid.Data.void();

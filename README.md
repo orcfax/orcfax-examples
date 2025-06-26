@@ -22,10 +22,10 @@ these dependencies.
 $tree -L 1
 .
 ├── core        # shared code
-├── flake.lock  
+├── flake.lock
 ├── flake.nix
 ├── mock        # A mock publisher
-├── README.md   
+├── README.md
 └── synthetics  # A toy synthetic assets dApp using Orcfax
 ```
 
@@ -91,6 +91,7 @@ append it an `.env` would look something like.
 ```sh
 ./core/app/mkKeys.ts <optional-wallet-name> >> .env
 ```
+
 An alphanumeric wallet name is expected.
 
 Each dapp has its own required wallet names it expects. See `.env.example`

@@ -13,12 +13,9 @@ export function cli(cmd: Command) {
     const refsAt = core.cli.resolveAddress(l.network, opts.refsAt);
     const label = mod.cli.parseFsLabel(opts.fsLabel);
     const script = fs.mkScript(label);
-    core.txs.upload.tx(
-      l,
-      script,
-      refsAt,
-      lucid.Data.to<string>(lucid.fromText(label)),
-    ).then((tx) => core.txFinish.simple(l, tx));
+    core.txs.upload
+      .tx(l, script, refsAt, lucid.Data.to<string>(lucid.fromText(label)))
+      .then((tx) => core.txFinish.simple(l, tx));
   });
   return sub;
 }

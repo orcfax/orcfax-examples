@@ -31,15 +31,15 @@ export function cli(cmd: Command) {
           feedId: `CER/${base}-${quote}/v0`,
           createdAt: now,
           body: { num, denom },
-        }
-        console.log(statement)
+        };
+        console.log(statement);
         input = [parseStatement(statement)];
       } else if (opts.fromFile) {
         input = parseStatements(
           JSON.parse(Deno.readTextFileSync(opts.fromFile)),
         );
       }
-      console.log(input)
+      console.log(input);
 
       if (input == null) throw new Error("No statements provided");
       const l = await core.cli.parseLucidWithWallet(rest.parent.opts());
@@ -57,10 +57,9 @@ export async function tx(
   label: string,
   statements: fs.Statment[],
 ): Promise<lucid.Tx> {
-  const ref =
-    (await l.utxosAt(refsAt)).filter((u) =>
-      u.datum === lucid.Data.to<string>(lucid.fromText(label))
-    )[0];
+  const ref = (await l.utxosAt(refsAt)).filter(
+    (u) => u.datum === lucid.Data.to<string>(lucid.fromText(label)),
+  )[0];
   if (!ref) throw new Error("No ref found");
   return txInner(l, ref, statements);
 }

@@ -11,9 +11,9 @@ export interface WalletInfo {
 export type Wallets = Record<string, WalletInfo>;
 
 export const privateKeys = Object.fromEntries(
-  Object.keys(env).filter((k) => k.startsWith(walletLabel)).map(
-    (k) => [k.slice(walletLabel.length).toLowerCase(), env[k]],
-  ),
+  Object.keys(env)
+    .filter((k) => k.startsWith(walletLabel))
+    .map((k) => [k.slice(walletLabel.length).toLowerCase(), env[k]]),
 );
 
 export function walletInfo(

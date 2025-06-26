@@ -12,10 +12,7 @@ import { privateKeys, wallets } from "./wallets.ts";
 
 export function defaultProgam() {
   const program = new Command();
-  program
-    .name("oe")
-    .description("Orcfax-examples cli")
-    .version("0.0.1");
+  program.name("oe").description("Orcfax-examples cli").version("0.0.1");
   return program;
 }
 
@@ -26,15 +23,11 @@ Sane defaults are provided.
 `;
 
 export function addNetwork(program: Command) {
-  program
-    .addOption(
-      new Option("--network <network>", "Cardano network").choices([
-        "mainnet",
-        "preprod",
-        "preview",
-        "custom",
-      ]).makeOptionMandatory(),
-    );
+  program.addOption(
+    new Option("--network <network>", "Cardano network")
+      .choices(["mainnet", "preprod", "preview", "custom"])
+      .makeOptionMandatory(),
+  );
   return program;
 }
 
@@ -42,18 +35,10 @@ export function addProvider(program: Command) {
   program
     .addOption(
       new Option("--provider <provider>", "Provider of network services")
-        .choices([
-          "blockfrost",
-          "kupmios",
-          "emulator",
-        ]).makeOptionMandatory(),
+        .choices(["blockfrost", "kupmios", "emulator"])
+        .makeOptionMandatory(),
     )
-    .addOption(
-      new Option(
-        "--provider-opts <opts>",
-        providerHelp,
-      ),
-    );
+    .addOption(new Option("--provider-opts <opts>", providerHelp));
   return program;
 }
 
@@ -64,13 +49,12 @@ export function addLucid(program: Command) {
 }
 
 export function addWallet(program: Command) {
-  program
-    .addOption(
-      new Option(
-        "--wallet <wallet>",
-        "Wallet funding the tx",
-      ).makeOptionMandatory(),
-    );
+  program.addOption(
+    new Option(
+      "--wallet <wallet>",
+      "Wallet funding the tx",
+    ).makeOptionMandatory(),
+  );
   return program;
 }
 
@@ -81,11 +65,13 @@ export function addLucidWithWallet(program: Command) {
   return program;
 }
 
-export type ProviderInfo = { type: "Blockfrost"; key: string } | {
-  type: "Kupmios";
-  kupoUrl: string;
-  ogmiosUrl: string;
-};
+export type ProviderInfo =
+  | { type: "Blockfrost"; key: string }
+  | {
+      type: "Kupmios";
+      kupoUrl: string;
+      ogmiosUrl: string;
+    };
 
 type Config = {
   sk: string;
@@ -110,9 +96,7 @@ function parseBlockfrostOpts(
   }
 }
 
-function parseKupmiosOpts(
-  opts: null | string,
-): KupmiosConfig {
+function parseKupmiosOpts(opts: null | string): KupmiosConfig {
   if (opts === null) {
     // Assume default ports on local host
     return {
@@ -127,9 +111,7 @@ function parseKupmiosOpts(
   }
 }
 
-function parseEmulatorOpts(
-  opts: null | string,
-): EmulatorConfig {
+function parseEmulatorOpts(opts: null | string): EmulatorConfig {
   if (opts === null) {
     throw new Error("Not yet implemented");
     // return { type: "EmulatorConfig" };
@@ -163,26 +145,31 @@ export function parseProvider(
   throw new Error("Cannot parse provider");
 }
 
-export function parseLucid(
-  { network, provider, providerOpts }: {
-    network: string;
-    provider: string;
-    providerOpts: string | undefined;
-  },
-): Promise<lucid.Lucid> {
+export function parseLucid({
+  network,
+  provider,
+  providerOpts,
+}: {
+  network: string;
+  provider: string;
+  providerOpts: string | undefined;
+}): Promise<lucid.Lucid> {
   const n = parseNetwork(network);
   const p = parseProvider(n, provider, providerOpts || "");
   return lucid.Lucid.new(p, n);
 }
 
-export function parseLucidWithWallet(
-  { network, provider, providerOpts, wallet }: {
-    network: string;
-    provider: string;
-    providerOpts: string | undefined;
-    wallet: string;
-  },
-): Promise<lucid.Lucid> {
+export function parseLucidWithWallet({
+  network,
+  provider,
+  providerOpts,
+  wallet,
+}: {
+  network: string;
+  provider: string;
+  providerOpts: string | undefined;
+  wallet: string;
+}): Promise<lucid.Lucid> {
   const sk = privateKeys[wallet];
   if (!sk) throw new Error(`Wallet unknown : ${wallet}`);
   return parseLucid({ network, provider, providerOpts }).then((res) => {

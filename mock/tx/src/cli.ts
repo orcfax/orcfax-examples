@@ -3,23 +3,21 @@ import { Command, Option } from "npm:commander";
 import { lucid } from "../deps.ts";
 
 export function addRefsAt(cmd: Command): Command {
-  return cmd
-    .addOption(
-      new Option(
-        "--refs-at <name-or-address>",
-        "Where reference scripts have been uploaded and can be found",
-      ).default("store"),
-    );
+  return cmd.addOption(
+    new Option(
+      "--refs-at <name-or-address>",
+      "Where reference scripts have been uploaded and can be found",
+    ).default("store"),
+  );
 }
 
 export function addFsLabel(cmd: Command): Command {
-  return cmd
-    .addOption(
-      new Option(
-        "--fs-label <fsLabel>",
-        "Used to indentify the fs script reference. Here it is the seed",
-      ).default(""),
-    );
+  return cmd.addOption(
+    new Option(
+      "--fs-label <fsLabel>",
+      "Used to indentify the fs script reference. Here it is the seed",
+    ).default(""),
+  );
 }
 
 export function parseFsLabel(x: string): string {
@@ -27,13 +25,12 @@ export function parseFsLabel(x: string): string {
 }
 
 export function addFspLabel(cmd: Command): Command {
-  return cmd
-    .addOption(
-      new Option(
-        "--fsp-label <fspLabel>",
-        "Used to indentify the fsp script reference. Here it is the seed",
-      ).default(""),
-    );
+  return cmd.addOption(
+    new Option(
+      "--fsp-label <fspLabel>",
+      "Used to indentify the fsp script reference. Here it is the seed",
+    ).default(""),
+  );
 }
 
 export function parseFspLabel(x: string): string {
@@ -41,13 +38,12 @@ export function parseFspLabel(x: string): string {
 }
 
 export function addFsHash(cmd: Command): Command {
-  return cmd
-    .addOption(
-      new Option(
-        "--fsp-hash <base16>",
-        "Used to indentify the fs script reference. Here it is the seed",
-      ).makeOptionMandatory(),
-    );
+  return cmd.addOption(
+    new Option(
+      "--fsp-hash <base16>",
+      "Used to indentify the fs script reference. Here it is the seed",
+    ).makeOptionMandatory(),
+  );
 }
 
 export function parseFsHash(x: string): string {
@@ -59,13 +55,12 @@ export function parseFsHash(x: string): string {
 }
 
 export function addCurrency(cmd: Command): Command {
-  return cmd
-    .addOption(
-      new Option(
-        "--currency <currency>",
-        "The currency as it appears in the orcfax CER feed id. eg `USD` for `CER/ADA-USD/",
-      ).makeOptionMandatory(),
-    );
+  return cmd.addOption(
+    new Option(
+      "--currency <currency>",
+      "The currency as it appears in the orcfax CER feed id. eg `USD` for `CER/ADA-USD/",
+    ).makeOptionMandatory(),
+  );
 }
 
 export function parseCurrency(x: string): string {
@@ -111,13 +106,12 @@ export function parseLabel(x: string): string {
 }
 
 export function addAmount(cmd: Command): Command {
-  return cmd
-    .addOption(
-      new Option(
-        "--amount <amt>",
-        "The amount of token to mint or burn",
-      ).makeOptionMandatory(),
-    );
+  return cmd.addOption(
+    new Option(
+      "--amount <amt>",
+      "The amount of token to mint or burn",
+    ).makeOptionMandatory(),
+  );
 }
 
 export function parseAmount(x: string): bigint {

@@ -15,12 +15,9 @@ export function cli(cmd: Command) {
     const { fspHash, currency, adaIsBase } = mod.cli.parseParams(opts);
     const label = mod.cli.parseLabel(opts.label);
     const script = synthetics.mkScript(fspHash, currency, adaIsBase);
-    core.txs.upload.tx(
-      l,
-      script,
-      refsAt,
-      label,
-    ).then((tx) => core.txFinish.simple(l, tx));
+    core.txs.upload
+      .tx(l, script, refsAt, label)
+      .then((tx) => core.txFinish.simple(l, tx));
   });
   return sub;
 }

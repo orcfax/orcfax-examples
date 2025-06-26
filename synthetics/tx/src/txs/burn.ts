@@ -16,12 +16,13 @@ export function cli(cmd: Command) {
     const { fspHash, currency, adaIsBase } = mod.cli.parseParams(opts);
     const script = v.mkScript(fspHash, currency, adaIsBase);
     const ownHash = l.utils.validatorToScriptHash(script);
-    const ref = (await l.utxosAt(refsAt)).find((u) =>
-      u.scriptRef && l.utils.validatorToScriptHash(u.scriptRef) == ownHash
+    const ref = (await l.utxosAt(refsAt)).find(
+      (u) =>
+        u.scriptRef && l.utils.validatorToScriptHash(u.scriptRef) == ownHash,
     );
     if (!ref) throw new Error("No ref found");
     return tx(l, ref, v.mkParams(fspHash, currency, adaIsBase)).then((t) =>
-      core.txFinish.simple(l, t)
+      core.txFinish.simple(l, t),
     );
   });
   return sub;
@@ -48,22 +49,20 @@ export async function tx(
   const lb = now - 10 * 60 * 1000;
   const ub = now + 10 * 60 * 1000;
 
-  const s0 = states.filter(
-    (s) => s.feedId.startsWith(lucid.toText(feedId)),
-  );
-  const s1 = s0.filter((s) =>
-    (lb <= Number(s.createdAt)) && (ub >= Number(s.createdAt))
+  const s0 = states.filter((s) => s.feedId.startsWith(lucid.toText(feedId)));
+  const s1 = s0.filter(
+    (s) => lb <= Number(s.createdAt) && ub >= Number(s.createdAt),
   );
   const statement = s1[0];
 
-  const userAmt = Object(
-    core.lucidExtras.sumUtxos(await l.wallet.getUtxos()),
-  )[mod.validators.synthetics.unit(ownHash, currency)];
+  const userAmt = Object(core.lucidExtras.sumUtxos(await l.wallet.getUtxos()))[
+    mod.validators.synthetics.unit(ownHash, currency)
+  ];
 
   const positions = await mod.validators.synthetics.getStates(l, ownHash);
   const body = statement.body;
   const [a, b] = adaIsBase ? [body.num, body.denom] : [body.denom, body.num];
-  const userAmtAda = userAmt * b / a;
+  const userAmtAda = (userAmt * b) / a;
   let tot = userAmtAda;
   const usedPositions = [];
   while (tot > 0) {
@@ -76,7 +75,7 @@ export async function tx(
   }
   if (usedPositions.length == 0) throw new Error("No positions available");
 
-  const amt = (tot - userAmtAda) * statement.body.num / statement.body.denom;
+  const amt = ((tot - userAmtAda) * statement.body.num) / statement.body.denom;
   const mintAssets = v.asset(ownHash, params[0].currency, amt);
   const red = lucid.Data.void();
 
@@ -88,7 +87,7 @@ export async function tx(
     .mintAssets(mintAssets, red)
     .collectFrom(
       usedPositions,
-      mod.validators.synthetics.toData3({ "wrapper": lucid.Data.void() }),
+      mod.validators.synthetics.toData3({ wrapper: lucid.Data.void() }),
     );
   return tx;
 }

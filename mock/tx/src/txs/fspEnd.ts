@@ -22,10 +22,9 @@ export async function tx(
   refsAt: string,
   label: string,
 ): Promise<lucid.Tx> {
-  const ref =
-    (await l.utxosAt(refsAt)).filter((u) =>
-      u.datum === lucid.Data.to<string>(lucid.fromText(label))
-    )[0];
+  const ref = (await l.utxosAt(refsAt)).filter(
+    (u) => u.datum === lucid.Data.to<string>(lucid.fromText(label)),
+  )[0];
   if (!ref) throw new Error("No ref found");
   return txInner(l, ref);
 }
@@ -47,13 +46,8 @@ export async function txInner(
   const t = l
     .newTx()
     .readFrom([ref])
-    .collectFrom(
-      [auth],
-    )
-    .collectFrom(
-      [u],
-      red3,
-    )
+    .collectFrom([auth])
+    .collectFrom([u], red3)
     .mintAssets(mintAssets, red2);
   return t;
 }

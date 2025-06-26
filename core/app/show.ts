@@ -6,12 +6,7 @@ import { Command } from "npm:commander";
 
 function cli() {
   const program = new Command();
-  program
-    .name("show")
-    .description(
-      "show useful info",
-    )
-    .version("0.0.1");
+  program.name("show").description("show useful info").version("0.0.1");
   const wallets = program.command("wallets");
   core.cli.addNetwork(wallets);
   wallets.action((opts, _) => {
@@ -25,9 +20,9 @@ function cli() {
     Object.entries(core.wallets.wallets(l.network)).forEach(async ([k, v]) => {
       console.log(
         k,
-        await l.utxosAt(v.address).then((res) =>
-          opts.sum ? core.lucidExtras.sumUtxos(res) : res
-        ),
+        await l
+          .utxosAt(v.address)
+          .then((res) => (opts.sum ? core.lucidExtras.sumUtxos(res) : res)),
       );
     });
   });

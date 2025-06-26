@@ -22,10 +22,9 @@ export async function tx(
   refsAt: string,
   label: string,
 ): Promise<lucid.Tx> {
-  const ref =
-    (await l.utxosAt(refsAt)).filter((u) =>
-      u.datum === lucid.Data.to<string>(lucid.fromText(label))
-    )[0];
+  const ref = (await l.utxosAt(refsAt)).filter(
+    (u) => u.datum === lucid.Data.to<string>(lucid.fromText(label)),
+  )[0];
   if (!ref) throw new Error("No ref found");
   const fsScript = ref.scriptRef!;
   const fsHash = l.utils.validatorToScriptHash(fsScript);

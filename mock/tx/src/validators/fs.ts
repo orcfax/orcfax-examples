@@ -47,7 +47,7 @@ export function mkParams(seed: string): Params {
 
 export function mkScript(seed: string) {
   const script = new bp.FsTwo(mkParams(seed)[0]);
-  if ((script === undefined) || (script == null)) throw "no script at ref";
+  if (script === undefined || script == null) throw "no script at ref";
   return script;
 }
 

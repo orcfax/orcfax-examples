@@ -31,7 +31,7 @@ export function mkScript(
   const script = new bp.SyntheticsTwo(
     mkParams(fspHash, currency, adaIsBase)[0],
   );
-  if ((script === undefined) || (script == null)) throw "no script at ref";
+  if (script === undefined || script == null) throw "no script at ref";
   return script;
 }
 

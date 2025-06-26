@@ -25,10 +25,9 @@ export async function tx(
   label: string,
   payload: string,
 ): Promise<lucid.Tx> {
-  const ref =
-    (await l.utxosAt(refsAt)).filter((u) =>
-      u.datum === lucid.Data.to<string>(lucid.fromText(label))
-    )[0];
+  const ref = (await l.utxosAt(refsAt)).filter(
+    (u) => u.datum === lucid.Data.to<string>(lucid.fromText(label)),
+  )[0];
   if (!ref) throw new Error("No ref found");
   return txInner(l, ref, payload);
 }

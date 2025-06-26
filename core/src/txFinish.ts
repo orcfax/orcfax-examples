@@ -12,7 +12,8 @@ function explorerLink(l: lucid.Lucid, txId: string) {
 }
 
 export async function simple(l: lucid.Lucid, tx: lucid.Tx) {
-  const txId = await tx.complete()
+  const txId = await tx
+    .complete()
     .then((res) => res.sign())
     .then((res) => res.complete())
     .then((res) => res.submit());
@@ -25,7 +26,8 @@ export async function withChangeAddress(
   tx: lucid.Tx,
   address: string,
 ) {
-  const txId = await tx.complete({ change: { address } })
+  const txId = await tx
+    .complete({ change: { address } })
     .then((res) => res.sign())
     .then((res) => res.complete())
     .then((res) => res.submit());

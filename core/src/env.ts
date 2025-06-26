@@ -8,5 +8,5 @@ export const blockfrostkey = (network: string) =>
 export const env = await load().then((res) =>
   Object.fromEntries(
     Object.keys(res).map((k) => [k, Deno.env.get(k) || res[k]]),
-  )
+  ),
 );

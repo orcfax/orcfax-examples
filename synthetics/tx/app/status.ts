@@ -6,12 +6,7 @@ import * as mod from "../mod.ts";
 
 function cli() {
   const cmd = new Command();
-  cmd
-    .name("status")
-    .description(
-      "get dapp status",
-    )
-    .version("0.0.1");
+  cmd.name("status").description("get dapp status").version("0.0.1");
   core.cli.addLucid(cmd);
   mod.cli.addRefsAt(cmd);
   mod.cli.addFspHash(cmd);
@@ -35,16 +30,17 @@ async function status(
   const refs = await l.utxosAt(refsAt);
   const script = mod.validators.synthetics.mkScript(fspLabel, feedId);
   const scriptHash = l.utils.validatorToScriptHash(script);
-  const ref = refs.find((u) =>
-    u.scriptRef && l.utils.validatorToScriptHash(u.scriptRef) == scriptHash
+  const ref = refs.find(
+    (u) =>
+      u.scriptRef && l.utils.validatorToScriptHash(u.scriptRef) == scriptHash,
   );
   console.log(
     refs.map((u) => u.scriptRef && l.utils.validatorToScriptHash(u.scriptRef)),
   );
   console.log(scriptHash);
   if (!ref) throw new Error("No ref found");
-  const fspRef = refs.find((u) =>
-    u.datum === lucid.Data.to<string>(lucid.fromText(fspLabel))
+  const fspRef = refs.find(
+    (u) => u.datum === lucid.Data.to<string>(lucid.fromText(fspLabel)),
   );
   if (!fspRef) throw new Error("No ref found");
   if (refs.length > 2) {

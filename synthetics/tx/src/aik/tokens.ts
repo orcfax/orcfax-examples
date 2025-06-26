@@ -8,8 +8,7 @@ export function mkFeedId(currency: string, adaIsBase: boolean): string {
 }
 
 export function synthetic(currency: string) {
-  return lucid.fromText("synth:".concat(lucid.toText(currency))).slice(
-    0,
-    2 * 32,
-  );
+  return lucid
+    .fromText("synth:".concat(lucid.toText(currency)))
+    .slice(0, 2 * 32);
 }

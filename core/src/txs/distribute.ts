@@ -11,20 +11,19 @@ export async function tx(
 ): Promise<lucid.Tx> {
   const utx = l.newTx();
   Object.entries(addressAmt).forEach((e) =>
-    utx.payToAddress(e[0], { lovelace: e[1] })
+    utx.payToAddress(e[0], { lovelace: e[1] }),
   );
   return utx;
 }
 
 export function cli(program: Command) {
   const x = program.command("distribute");
-  x
-    .addOption(
-      new Option(
-        "--to <wallet0:amt0;wallet1:amt1;...>",
-        "Recipient(s) of funds. <wallet> can be wallet name or bech32 address. Amount in ada",
-      ).makeOptionMandatory(),
-    );
+  x.addOption(
+    new Option(
+      "--to <wallet0:amt0;wallet1:amt1;...>",
+      "Recipient(s) of funds. <wallet> can be wallet name or bech32 address. Amount in ada",
+    ).makeOptionMandatory(),
+  );
   x.action(async (opts, rest) => {
     const l = await parseLucidWithWallet(rest.parent.opts());
     const addressAmts = Object.fromEntries(
