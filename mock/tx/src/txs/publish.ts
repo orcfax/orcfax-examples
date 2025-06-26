@@ -22,10 +22,6 @@ export function cli(cmd: Command) {
       ),
     )
     .action(async (opts, rest) => {
-      const l = await core.cli.parseLucidWithWallet(rest.parent.opts());
-      const refsAt = core.cli.resolveAddress(l.network, opts.refsAt);
-      const label = mod.cli.parseFsLabel(opts.fsLabel);
-
       let input: fs.Statment[] | null = null;
 
       if (opts.newCer) {
@@ -43,8 +39,13 @@ export function cli(cmd: Command) {
           JSON.parse(Deno.readTextFileSync(opts.fromFile)),
         );
       }
+      console.log(input)
 
       if (input == null) throw new Error("No statements provided");
+      const l = await core.cli.parseLucidWithWallet(rest.parent.opts());
+      const refsAt = core.cli.resolveAddress(l.network, opts.refsAt);
+      const label = mod.cli.parseFsLabel(opts.fsLabel);
+
       tx(l, refsAt, label, input).then((res) => core.txFinish.simple(l, res));
     });
   return cmd;
